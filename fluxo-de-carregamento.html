@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Do Enter até a página — LAWD UFS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=MuseoModerno:wght@300;400;500;600;700&family=Saira:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ---------- fonte secundária: 29LT Makina se instalada, senão Saira ---------- */
+@font-face{
+  font-family:"Makina";
+  src:local("29LT Makina Regular"), local("29LTMakina-Regular"), local("29LT Makina");
+  font-weight:400; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:"Makina";
+  src:local("29LT Makina Medium"), local("29LTMakina-Medium");
+  font-weight:500; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:"Makina";
+  src:local("29LT Makina Bold"), local("29LTMakina-Bold");
+  font-weight:700; font-style:normal; font-display:swap;
+}
+
+/* ---------- tokens ---------- */
+:root{
+  --bg:#ffffff;
+  --fg:#000000;
+  --suave:#4a4356;
+  --superficie:#f3edfe;
+  --linha:rgba(20,0,48,.16);
+  --acento:#6a18e0;
+  --acento-forte:#5310b8;
+  --sobre-acento:#ffffff;
+  --maquina-bg:#0b0114;
+  --maquina-fg:#ffffff;
+  --maquina-linha:rgba(255,255,255,.14);
+  --ok:#00d18f;
+
+  --humana:"MuseoModerno", ui-rounded, "Segoe UI", system-ui, sans-serif;
+  --maquina:"Makina", "Saira", ui-sans-serif, system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#000000;
+    --fg:#ffffff;
+    --suave:#a897c4;
+    --superficie:#150827;
+    --linha:rgba(255,255,255,.18);
+    --acento:#8b3bff;
+    --acento-forte:#a06bff;
+    --sobre-acento:#ffffff;
+    --maquina-bg:#0d0518;
+    --maquina-fg:#ffffff;
+    --maquina-linha:rgba(255,255,255,.16);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#000000;
+  --fg:#ffffff;
+  --suave:#a897c4;
+  --superficie:#150827;
+  --linha:rgba(255,255,255,.18);
+  --acento:#8b3bff;
+  --acento-forte:#a06bff;
+  --sobre-acento:#ffffff;
+  --maquina-bg:#0d0518;
+  --maquina-fg:#ffffff;
+  --maquina-linha:rgba(255,255,255,.16);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--fg);
+  font-family:var(--humana);
+  font-weight:400;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.folha{max-width:34rem;margin:0 auto;padding:0 1.25rem 4rem}
+img{max-width:100%}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--acento-forte);outline-offset:3px;border-radius:2px}
+
+/* ---------- topo ---------- */
+.topo{display:flex;align-items:center;gap:.6rem;padding:1.4rem 0 2.6rem}
+.marca{
+  display:inline-flex;align-items:center;justify-content:center;
+  background:var(--acento);color:var(--sobre-acento);
+  font-family:var(--humana);font-weight:700;font-size:.95rem;letter-spacing:.06em;
+  padding:.3rem .55rem .35rem;border-radius:.3rem;
+}
+.topo p{margin:0;font-family:var(--maquina);font-size:.76rem;line-height:1.3;color:var(--suave)}
+
+/* ---------- abertura ---------- */
+h1{
+  font-family:var(--humana);font-weight:600;
+  font-size:clamp(2rem,9vw,2.7rem);line-height:1.02;letter-spacing:-.02em;
+  margin:0 0 1rem;
+}
+.abertura p{margin:0 0 1.6rem;font-size:1.05rem;color:var(--suave);max-width:30ch}
+
+/* ---------- barra de endereço ---------- */
+.fixa{position:sticky;top:0;z-index:20;background:var(--bg);padding:.7rem 0 .55rem;margin-bottom:1.6rem}
+.fixa::before{content:"";position:absolute;inset:0 -1.25rem;background:var(--bg);z-index:-1}
+.barra{
+  display:flex;align-items:center;gap:.4rem;
+  background:var(--superficie);border:1px solid var(--linha);
+  border-radius:999px;padding:.35rem .35rem .35rem .85rem;
+  position:relative;overflow:hidden;
+}
+.barra:focus-within{border-color:var(--acento)}
+.protocolo{font-family:var(--maquina);font-size:.8rem;color:var(--suave);flex:0 0 auto}
+#url{
+  flex:1 1 auto;min-width:0;background:none;border:0;padding:.35rem 0;
+  font-family:var(--maquina);font-size:.95rem;color:var(--fg);
+}
+#url::placeholder{color:var(--suave);opacity:.75}
+#url:focus{outline:none}
+.enter{
+  flex:0 0 auto;border:0;cursor:pointer;
+  background:var(--acento);color:var(--sobre-acento);
+  font-family:var(--maquina);font-weight:500;font-size:.78rem;
+  padding:.45rem .8rem;border-radius:999px;
+}
+.enter[disabled]{opacity:.35;cursor:not-allowed}
+.carga{position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--acento);transition:width .45s ease}
+.estado{
+  margin:.5rem .2rem 0;font-family:var(--maquina);font-size:.72rem;color:var(--suave);
+  display:flex;align-items:center;gap:.4rem;
+}
+.ponto{width:6px;height:6px;border-radius:50%;background:var(--acento);flex:0 0 auto}
+.ponto.pisca{animation:pisca 1s steps(2) infinite}
+@keyframes pisca{50%{opacity:.25}}
+
+/* ---------- etapas ---------- */
+.etapas{list-style:none;margin:0;padding:0;display:grid;gap:1rem}
+.etapa{
+  border:1px solid var(--linha);border-radius:1rem;padding:1.1rem 1.05rem 1.15rem;
+  background:var(--bg);
+}
+.etapa[hidden]{display:none}
+.etapa[data-estado="feita"]{border-color:var(--linha);opacity:.86}
+.etapa[data-estado="ativa"]{border-color:var(--acento);box-shadow:0 0 0 1px var(--acento)}
+.cabeca{display:flex;align-items:baseline;gap:.6rem;margin-bottom:.45rem}
+.numero{font-family:var(--maquina);font-size:.78rem;color:var(--acento);flex:0 0 auto;font-weight:500}
+.etapa h2{font-family:var(--humana);font-weight:600;font-size:1.22rem;line-height:1.15;margin:0;letter-spacing:-.01em}
+.texto{margin:0 0 .9rem;font-size:.95rem;color:var(--suave)}
+.texto b{color:var(--fg);font-weight:600}
+
+.acao{
+  display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;
+  background:var(--acento);color:var(--sobre-acento);border:0;
+  font-family:var(--humana);font-weight:500;font-size:.95rem;
+  padding:.6rem 1.05rem;border-radius:.6rem;
+}
+.acao:active{transform:translateY(1px)}
+.acao[hidden]{display:none}
+
+/* ---------- consoles ---------- */
+.maquina{
+  background:var(--maquina-bg);color:var(--maquina-fg);
+  border-radius:.65rem;padding:.7rem .8rem;margin-top:.9rem;
+  font-family:var(--maquina);font-size:.78rem;line-height:1.7;
+  overflow-x:auto;
+}
+.maquina[hidden]{display:none}
+.linha{white-space:pre;color:#cbb8e8}
+.linha--saida{color:#fff}
+.linha--destaque{color:#c79bff;font-weight:500}
+.linha--ok{color:var(--ok)}
+.tempo{
+  display:inline-block;margin-top:.75rem;
+  font-family:var(--maquina);font-size:.72rem;color:var(--suave);
+  border:1px solid var(--linha);border-radius:999px;padding:.15rem .55rem;
+}
+.tempo[hidden]{display:none}
+
+/* ---------- códigos de status ---------- */
+.codigos{display:flex;gap:.4rem;margin:.9rem 0 .2rem;flex-wrap:wrap}
+.codigo{
+  cursor:pointer;border:1px solid var(--linha);background:none;
+  font-family:var(--maquina);font-size:.8rem;padding:.3rem .65rem;border-radius:.4rem;
+}
+.codigo[aria-pressed="true"]{background:var(--acento);color:var(--sobre-acento);border-color:var(--acento)}
+.explica{margin:.6rem 0 0;font-size:.88rem;color:var(--suave);min-height:2.6em}
+
+/* ---------- recursos ---------- */
+.recursos{list-style:none;margin:.9rem 0 0;padding:0;display:grid;gap:.5rem}
+.recurso{display:flex;align-items:center;gap:.6rem;border-top:1px solid var(--linha);padding-top:.5rem}
+.recurso:first-child{border-top:0;padding-top:0}
+.arquivo{font-family:var(--maquina);font-size:.85rem;flex:1 1 auto;min-width:0}
+.buscar{
+  cursor:pointer;background:none;border:1px solid var(--acento);color:var(--acento);
+  font-family:var(--humana);font-weight:500;font-size:.82rem;
+  padding:.3rem .7rem;border-radius:.45rem;flex:0 0 auto;
+}
+.recurso[data-pronto="1"] .buscar{display:none}
+.selo{font-family:var(--maquina);font-size:.72rem;color:var(--ok);flex:0 0 auto}
+.selo[hidden]{display:none}
+
+/* ---------- pré-visualização ---------- */
+.moldura{margin-top:1rem;border:1px solid var(--linha);border-radius:.75rem;overflow:hidden}
+.moldura-topo{
+  display:flex;align-items:center;gap:.4rem;padding:.45rem .7rem;
+  background:var(--superficie);border-bottom:1px solid var(--linha);
+  font-family:var(--maquina);font-size:.7rem;color:var(--suave);
+}
+.pv{background:#fff;color:#000;padding:1rem;font-family:"Times New Roman",Times,serif}
+.pv h3{font-size:1.5em;margin:.67em 0;font-weight:700}
+.pv p{margin:1em 0}
+.pv nav{margin:1em 0}
+.pv nav span{color:#0000ee;text-decoration:underline;margin-right:.8em;cursor:pointer}
+.pv-img{
+  display:inline-block;border:1px solid #999;padding:.3em .5em;
+  font-size:.85em;color:#555;font-family:"Times New Roman",serif;
+}
+.pv-img svg{display:block}
+.pv-nota{font-size:.8em;color:#b00;margin-top:.6em}
+.pv-nota[hidden]{display:none}
+.pv-lista{margin:.8em 0 0;padding-left:1.2em}
+.pv-lista[hidden]{display:none}
+
+/* estado com CSS aplicado */
+.pv.tem-css{
+  background:#0d0518;color:#fff;font-family:var(--humana);padding:1.3rem 1.1rem 1.5rem;
+}
+.pv.tem-css h3{font-family:var(--humana);font-weight:600;font-size:1.18rem;line-height:1.15;margin:.2rem 0 .5rem;letter-spacing:-.01em}
+.pv.tem-css p{font-size:.85rem;line-height:1.5;color:#c3b2dd;margin:0 0 .9rem}
+.pv.tem-css nav{display:flex;gap:.9rem;margin:0 0 1rem;border-top:1px solid rgba(255,255,255,.15);padding-top:.7rem}
+.pv.tem-css nav span{color:#fff;text-decoration:none;font-size:.78rem;font-family:var(--maquina)}
+.pv.tem-css .pv-img{border:0;padding:0;color:#fff;font-family:var(--maquina);font-size:.75rem}
+.pv.tem-css .pv-btn{
+  background:#8b3bff;color:#fff;border:0;border-radius:.45rem;
+  font-family:var(--humana);font-weight:500;font-size:.85rem;padding:.5rem .9rem;cursor:pointer;
+}
+.pv.tem-css .pv-lista{color:#c3b2dd;font-size:.8rem;font-family:var(--maquina);padding-left:1.1em}
+.pv.tem-css .pv-nota{color:#ff9db5;font-size:.75rem}
+
+/* ---------- fecho ---------- */
+.fecho{margin-top:1.6rem;background:var(--acento);color:var(--sobre-acento);border-radius:1rem;padding:1.3rem 1.1rem 1.4rem}
+.fecho[hidden]{display:none}
+.fecho h2{font-family:var(--humana);font-weight:600;font-size:1.35rem;line-height:1.1;margin:0 0 .6rem}
+.fecho p{margin:0 0 .9rem;font-size:.95rem;opacity:.92}
+.total{font-family:var(--maquina);font-size:2.6rem;line-height:1;display:block;margin:.2rem 0 .8rem}
+.total small{font-size:.9rem;opacity:.8;margin-left:.2rem}
+.recarregar{
+  cursor:pointer;background:var(--sobre-acento);color:var(--acento-forte);border:0;
+  font-family:var(--humana);font-weight:600;font-size:.95rem;padding:.65rem 1.1rem;border-radius:.6rem;
+}
+.rodape{margin-top:2.5rem;font-family:var(--maquina);font-size:.72rem;color:var(--suave);line-height:1.6}
+
+@media (min-width:40rem){
+  .folha{max-width:38rem;padding-bottom:5rem}
+  .etapa{padding:1.4rem 1.35rem}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<div class="folha">
+
+  <header class="topo">
+    <span class="marca">LAWD</span>
+    <p>Liga Acadêmica de<br>Desenvolvimento Web</p>
+  </header>
+
+  <section class="abertura">
+    <h1>O que acontece entre o Enter e a página aparecer?</h1>
+    <p>Umas cinco etapas, em menos de meio segundo. Aqui elas acontecem só quando você manda.</p>
+  </section>
+
+  <div class="fixa">
+    <div class="barra">
+      <span class="protocolo">https://</span>
+      <input id="url" type="text" inputmode="url" autocomplete="off" spellcheck="false"
+             placeholder="digite lawd.ufs.br" aria-label="Barra de endereço">
+      <button class="enter" id="btnEnter" disabled>Enter</button>
+      <i class="carga" id="carga"></i>
+    </div>
+    <p class="estado" id="estado" aria-live="polite"><span class="ponto pisca"></span>esperando você digitar</p>
+  </div>
+
+  <ol class="etapas" id="etapas">
+
+    <li class="etapa" data-estado="ativa" id="e-url">
+      <div class="cabeca"><span class="numero">01</span><h2>Você digita o endereço</h2></div>
+      <p class="texto">Para você, <b>lawd.ufs.br</b> é um nome. Para o computador, não significa nada ainda — ele só sabe conversar com números.</p>
+      <div class="maquina" id="m-url" hidden></div>
+      <span class="tempo" id="t-url" hidden></span>
+    </li>
+
+    <li class="etapa" data-estado="bloqueada" id="e-dns" hidden>
+      <div class="cabeca"><span class="numero">02</span><h2>O DNS traduz o nome</h2></div>
+      <p class="texto">O navegador pergunta a um servidor de DNS qual é o <b>endereço IP</b> por trás desse nome. É a agenda de contatos da internet.</p>
+      <button class="acao" id="a-dns">Perguntar ao DNS</button>
+      <div class="maquina" id="m-dns" hidden></div>
+      <span class="tempo" id="t-dns" hidden></span>
+    </li>
+
+    <li class="etapa" data-estado="bloqueada" id="e-pedido" hidden>
+      <div class="cabeca"><span class="numero">03</span><h2>O navegador faz o pedido</h2></div>
+      <p class="texto">Com o IP na mão, ele envia uma <b>requisição HTTP</b>: um bilhete de texto pedindo o arquivo principal do site.</p>
+      <button class="acao" id="a-pedido">Enviar o pedido</button>
+      <div class="maquina" id="m-pedido" hidden></div>
+      <span class="tempo" id="t-pedido" hidden></span>
+    </li>
+
+    <li class="etapa" data-estado="bloqueada" id="e-resposta" hidden>
+      <div class="cabeca"><span class="numero">04</span><h2>O servidor responde</h2></div>
+      <p class="texto">Do outro lado, o servidor procura ou monta o que foi pedido e devolve uma <b>resposta HTTP</b>: um código de status mais o conteúdo.</p>
+      <button class="acao" id="a-resposta">Ver a resposta</button>
+      <div class="maquina" id="m-resposta" hidden></div>
+      <div id="bloco-codigos" hidden>
+        <div class="codigos">
+          <button class="codigo" data-cod="200" aria-pressed="true">200</button>
+          <button class="codigo" data-cod="301" aria-pressed="false">301</button>
+          <button class="codigo" data-cod="404" aria-pressed="false">404</button>
+          <button class="codigo" data-cod="500" aria-pressed="false">500</button>
+        </div>
+        <p class="explica" id="explica">200 é o que acabou de acontecer: achei o que você pediu, aqui está.</p>
+      </div>
+      <span class="tempo" id="t-resposta" hidden></span>
+    </li>
+
+    <li class="etapa" data-estado="bloqueada" id="e-render" hidden>
+      <div class="cabeca"><span class="numero">05</span><h2>O navegador monta a página</h2></div>
+      <p class="texto">O HTML chegou, mas ele é só o esqueleto. Ao ler o arquivo, o navegador descobre que faltam outras coisas — e pede cada uma com uma <b>nova requisição</b>.</p>
+
+      <div class="moldura">
+        <div class="moldura-topo"><span class="ponto"></span><span id="pv-titulo">lawd.ufs.br</span></div>
+        <div class="pv" id="pv">
+          <span class="pv-img" id="pv-img">logo.svg</span>
+          <h3>Liga Acadêmica de Desenvolvimento Web</h3>
+          <nav><span>Projetos</span><span>Processo seletivo</span><span>Contato</span></nav>
+          <p>Estudantes da UFS construindo produtos digitais de verdade para a universidade.</p>
+          <button class="pv-btn" id="pv-btn">Ver projetos</button>
+          <ul class="pv-lista" id="pv-lista" hidden>
+            <li>Portal ufs.br</li>
+            <li>SIMGrade</li>
+            <li>Sistema POA</li>
+          </ul>
+          <p class="pv-nota" id="pv-nota" hidden>O botão existe, mas ainda não faz nada: o JavaScript não chegou.</p>
+        </div>
+      </div>
+
+      <ul class="recursos" id="recursos">
+        <li class="recurso" data-rec="css" data-pronto="0">
+          <span class="arquivo">estilo.css</span>
+          <span class="selo" hidden>carregado</span>
+          <button class="buscar">Buscar</button>
+        </li>
+        <li class="recurso" data-rec="logo" data-pronto="0">
+          <span class="arquivo">logo.svg</span>
+          <span class="selo" hidden>carregado</span>
+          <button class="buscar">Buscar</button>
+        </li>
+        <li class="recurso" data-rec="js" data-pronto="0">
+          <span class="arquivo">script.js</span>
+          <span class="selo" hidden>carregado</span>
+          <button class="buscar">Buscar</button>
+        </li>
+      </ul>
+
+      <div class="maquina" id="m-render" hidden></div>
+      <span class="tempo" id="t-render" hidden></span>
+    </li>
+  </ol>
+
+  <section class="fecho" id="fecho" hidden>
+    <h2 id="fecho-titulo">Página carregada</h2>
+    <span class="total" id="fecho-total">0<small>ms</small></span>
+    <p id="fecho-texto">Seis idas e voltas pela rede para montar uma página só. Cada arquivo extra é uma requisição nova — por isso um site enxuto abre mais rápido.</p>
+    <button class="recarregar" id="btnRecarregar">Recarregar a página</button>
+  </section>
+
+  <p class="rodape">
+    Os tempos e o IP são ilustrativos — 203.0.113.0/24 é uma faixa reservada para exemplos.<br>
+    Material de estudo da LAWD · UFS
+  </p>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var reduzido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var el = {
+    url: document.getElementById("url"),
+    enter: document.getElementById("btnEnter"),
+    carga: document.getElementById("carga"),
+    estado: document.getElementById("estado"),
+    fecho: document.getElementById("fecho"),
+    fechoTotal: document.getElementById("fecho-total"),
+    fechoTitulo: document.getElementById("fecho-titulo"),
+    fechoTexto: document.getElementById("fecho-texto"),
+    recarregar: document.getElementById("btnRecarregar"),
+    pv: document.getElementById("pv"),
+    pvBtn: document.getElementById("pv-btn"),
+    pvLista: document.getElementById("pv-lista"),
+    pvNota: document.getElementById("pv-nota"),
+    pvImg: document.getElementById("pv-img"),
+    pvTitulo: document.getElementById("pv-titulo"),
+    explica: document.getElementById("explica"),
+    blocoCodigos: document.getElementById("bloco-codigos")
+  };
+
+  var ORDEM = ["url","dns","pedido","resposta","render"];
+  var estado = { feitas:0, tempo:0, visitado:false, host:"lawd.ufs.br", recursos:0 };
+
+  var CUSTO_NOVO   = { dns:38, pedido:12, resposta:168, css:54, logo:61, js:88 };
+  var CUSTO_CACHE  = { dns:0,  pedido:11, resposta:59,  css:0,  logo:0,  js:0  };
+
+  function custo(chave){
+    return (estado.visitado ? CUSTO_CACHE : CUSTO_NOVO)[chave];
+  }
+
+  function linha(alvo, texto, tipo){
+    var d = document.createElement("div");
+    d.className = "linha" + (tipo ? " linha--" + tipo : "");
+    d.textContent = texto;
+    alvo.appendChild(d);
+    return d;
+  }
+
+  function mostrarMaquina(id){
+    var m = document.getElementById("m-" + id);
+    m.hidden = false;
+    return m;
+  }
+
+  function status(texto, piscando){
+    el.estado.innerHTML = "";
+    var p = document.createElement("span");
+    p.className = "ponto" + (piscando ? " pisca" : "");
+    var t = document.createTextNode(texto);
+    el.estado.appendChild(p);
+    el.estado.appendChild(t);
+  }
+
+  function progresso(){
+    el.carga.style.width = (estado.feitas / ORDEM.length * 100) + "%";
+  }
+
+  function marcarTempo(id, ms, rotulo){
+    var t = document.getElementById("t-" + id);
+    t.hidden = false;
+    t.textContent = rotulo ? rotulo : ("+" + ms + " ms   ·   total " + estado.tempo + " ms");
+  }
+
+  function concluir(id){
+    var etapa = document.getElementById("e-" + id);
+    etapa.setAttribute("data-estado", "feita");
+    var botao = etapa.querySelector(".acao");
+    if (botao) botao.hidden = true;
+    estado.feitas++;
+    progresso();
+
+    var proximo = ORDEM[ORDEM.indexOf(id) + 1];
+    if (proximo){
+      var prox = document.getElementById("e-" + proximo);
+      prox.hidden = false;
+      prox.setAttribute("data-estado", "ativa");
+      irPara(prox);
+    } else {
+      finalizar();
+    }
+  }
+
+  function irPara(node){
+    window.setTimeout(function(){
+      node.scrollIntoView({ behavior: reduzido ? "auto" : "smooth", block: "center" });
+    }, 60);
+  }
+
+  function gastar(chave){
+    var ms = custo(chave);
+    estado.tempo += ms;
+    return ms;
+  }
+
+  /* ---------- 01 · digitação ---------- */
+  function limpar(v){
+    return v.trim().replace(/^https?:\/\//i, "").replace(/\s+/g, "").slice(0, 60);
+  }
+
+  el.url.addEventListener("input", function(){
+    el.enter.disabled = limpar(el.url.value).length === 0;
+    if (!el.enter.disabled) status("pronto para enviar", false);
+  });
+
+  el.url.addEventListener("keydown", function(ev){
+    if (ev.key === "Enter" && !el.enter.disabled) enviarUrl();
+  });
+
+  el.enter.addEventListener("click", enviarUrl);
+
+  function enviarUrl(){
+    var host = limpar(el.url.value) || "lawd.ufs.br";
+    estado.host = host;
+    el.url.value = host;
+    el.url.blur();
+    el.pvTitulo.textContent = host;
+    el.enter.disabled = true;
+
+    var m = mostrarMaquina("url");
+    m.innerHTML = "";
+    linha(m, "entrada do usuário: " + host);
+    linha(m, "isto é um nome de domínio, não uma máquina", "destaque");
+    linha(m, "próximo passo: descobrir o IP", "saida");
+    marcarTempo("url", 0, "o pedido ainda nem saiu daqui");
+    status("procurando " + host, true);
+    concluir("url");
+  }
+
+  /* ---------- 02 · DNS ---------- */
+  document.getElementById("a-dns").addEventListener("click", function(){
+    var ms = gastar("dns");
+    var m = mostrarMaquina("dns");
+    m.innerHTML = "";
+    if (estado.visitado){
+      linha(m, "cache do navegador: " + estado.host);
+      linha(m, "→ 203.0.113.24  (guardado na visita anterior)", "ok");
+      marcarTempo("dns", ms, "0 ms · veio do cache");
+    } else {
+      linha(m, "quem é " + estado.host + " ?");
+      linha(m, "servidor de DNS responde:");
+      linha(m, "→ 203.0.113.24", "destaque");
+      marcarTempo("dns", ms);
+    }
+    status("conectando em 203.0.113.24", true);
+    concluir("dns");
+  });
+
+  /* ---------- 03 · requisição ---------- */
+  document.getElementById("a-pedido").addEventListener("click", function(){
+    var ms = gastar("pedido");
+    var m = mostrarMaquina("pedido");
+    m.innerHTML = "";
+    linha(m, "GET / HTTP/1.1", "destaque");
+    linha(m, "Host: " + estado.host);
+    linha(m, "Accept: text/html");
+    linha(m, "User-Agent: navegador do usuário");
+    marcarTempo("pedido", ms);
+    status("aguardando resposta de " + estado.host, true);
+    concluir("pedido");
+  });
+
+  /* ---------- 04 · resposta ---------- */
+  var SIGNIFICADO = {
+    "200":"200 é o que acabou de acontecer: achei o que você pediu, aqui está.",
+    "301":"301 significa que o endereço mudou de lugar. O navegador refaz tudo no endereço novo.",
+    "404":"404 significa que o servidor respondeu, mas não existe nada nesse caminho.",
+    "500":"500 significa que o pedido chegou e quebrou alguma coisa do lado do servidor."
+  };
+
+  document.getElementById("a-resposta").addEventListener("click", function(){
+    var ms = gastar("resposta");
+    var m = mostrarMaquina("resposta");
+    m.innerHTML = "";
+    linha(m, "HTTP/1.1 200 OK", "ok");
+    linha(m, "Content-Type: text/html; charset=utf-8");
+    linha(m, "Content-Length: 4210");
+    linha(m, "");
+    linha(m, "<!doctype html>", "saida");
+    linha(m, "<html lang=\"pt-BR\"> ... </html>", "saida");
+    el.blocoCodigos.hidden = false;
+    marcarTempo("resposta", ms);
+    status("montando a página", true);
+    concluir("resposta");
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(".codigo"), function(botao){
+    botao.addEventListener("click", function(){
+      Array.prototype.forEach.call(document.querySelectorAll(".codigo"), function(b){
+        b.setAttribute("aria-pressed", b === botao ? "true" : "false");
+      });
+      el.explica.textContent = SIGNIFICADO[botao.getAttribute("data-cod")];
+    });
+  });
+
+  /* ---------- 05 · renderização ---------- */
+  var MARCA_SVG = '<svg width="54" height="18" viewBox="0 0 54 18" fill="none" aria-hidden="true">' +
+    '<rect x="0" y="0" width="18" height="18" rx="4" fill="#8B3BFF"/>' +
+    '<path d="M5 4v10h8" stroke="#fff" stroke-width="2.2" fill="none"/>' +
+    '<text x="24" y="13.5" font-family="MuseoModerno, sans-serif" font-size="11" font-weight="700" fill="#ffffff">LAWD</text>' +
+    '</svg>';
+
+  Array.prototype.forEach.call(document.querySelectorAll(".recurso"), function(item){
+    item.querySelector(".buscar").addEventListener("click", function(){
+      var rec = item.getAttribute("data-rec");
+      var ms = gastar(rec);
+      item.setAttribute("data-pronto", "1");
+      item.querySelector(".selo").hidden = false;
+      item.querySelector(".selo").textContent = (ms === 0 && estado.visitado) ? "do cache" : "+" + ms + " ms";
+
+      var m = mostrarMaquina("render");
+      linha(m, "GET /" + item.querySelector(".arquivo").textContent + "  →  200 OK" + (ms === 0 ? "  (cache)" : "  ·  " + ms + " ms"), ms === 0 ? "ok" : "saida");
+
+      if (rec === "css") el.pv.classList.add("tem-css");
+      if (rec === "logo"){ el.pvImg.innerHTML = MARCA_SVG; }
+      if (rec === "js"){ el.pvNota.hidden = true; }
+
+      estado.recursos++;
+      if (estado.recursos === 3){
+        marcarTempo("render", 0, "total da página: " + estado.tempo + " ms");
+        status("concluído", false);
+        concluir("render");
+      }
+    });
+  });
+
+  el.pvBtn.addEventListener("click", function(){
+    var jsPronto = document.querySelector('.recurso[data-rec="js"]').getAttribute("data-pronto") === "1";
+    if (jsPronto){
+      el.pvLista.hidden = !el.pvLista.hidden;
+      el.pvBtn.textContent = el.pvLista.hidden ? "Ver projetos" : "Esconder projetos";
+    } else {
+      el.pvNota.hidden = false;
+    }
+  });
+
+  /* ---------- fecho ---------- */
+  function finalizar(){
+    el.fecho.hidden = false;
+    el.fechoTotal.innerHTML = estado.tempo + "<small>ms</small>";
+    if (estado.visitado){
+      el.fechoTitulo.textContent = "Mesma página, quase nada de rede";
+      el.fechoTexto.textContent = "Na segunda visita o navegador já sabia o IP e já tinha os arquivos guardados. Sobrou só confirmar o HTML com o servidor. É isso que o cache faz.";
+      el.recarregar.textContent = "Começar do zero";
+    } else {
+      el.fechoTitulo.textContent = "Página carregada";
+      el.fechoTexto.textContent = "Foram seis idas e voltas pela rede para montar uma página só. Cada arquivo extra é uma requisição nova — por isso um site enxuto abre mais rápido. Recarregue para ver o que muda com o cache.";
+      el.recarregar.textContent = "Recarregar a página";
+    }
+    irPara(el.fecho);
+  }
+
+  el.recarregar.addEventListener("click", function(){
+    var eraNovo = !estado.visitado;
+    estado = { feitas:0, tempo:0, visitado:eraNovo, host:estado.host, recursos:0 };
+
+    ORDEM.forEach(function(id, i){
+      var etapa = document.getElementById("e-" + id);
+      etapa.hidden = i !== 0;
+      etapa.setAttribute("data-estado", i === 0 ? "ativa" : "bloqueada");
+      var botao = etapa.querySelector(".acao");
+      if (botao) botao.hidden = false;
+      var m = document.getElementById("m-" + id);
+      m.hidden = true; m.innerHTML = "";
+      document.getElementById("t-" + id).hidden = true;
+    });
+
+    Array.prototype.forEach.call(document.querySelectorAll(".recurso"), function(item){
+      item.setAttribute("data-pronto", "0");
+      item.querySelector(".selo").hidden = true;
+      item.querySelector(".buscar").style.display = "";
+    });
+
+    el.pv.classList.remove("tem-css");
+    el.pvImg.textContent = "logo.svg";
+    el.pvLista.hidden = true;
+    el.pvNota.hidden = true;
+    el.pvBtn.textContent = "Ver projetos";
+    el.blocoCodigos.hidden = true;
+    el.fecho.hidden = true;
+    el.carga.style.width = "0%";
+    el.url.value = estado.host;
+    el.enter.disabled = false;
+    status(eraNovo ? "segunda visita: o cache está quente" : "esperando você digitar", true);
+    irPara(document.getElementById("e-url"));
+  });
+
+  progresso();
+})();
+</script>
+</body>
+</html>
